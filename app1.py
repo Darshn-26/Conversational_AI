@@ -1,5 +1,5 @@
 import os
-from dotenv import load_dotenv
+#from dotenv import load_dotenv
 from flask import Flask, request, jsonify, render_template
 from groq import Groq  # Assuming the `groq` package is installed and available
  # Assuming you have a way to store/get the API key
@@ -10,14 +10,27 @@ app = Flask(__name__)
 
 app = Flask(__name__)
 
-load_dotenv()
+#load_dotenv()
+def read_api_key(file_path):
+    try:
+        with open(file_path, 'r') as file:
+            api_key = file.readline().strip()  # Read the first line and remove any whitespace
+        return api_key
+    except FileNotFoundError:
+        print("Error: File not found. Please check the file path.")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
+# Example usage
+file_path = 'apikey.txt'  # Update with the actual path to your file
+api_key = read_api_key(file_path)
+groq_api_key = api_key
 
 app = Flask(__name__)
 
 # Fetch API key from environment variable
-groq_api_key = os.getenv('GROQ_API_KEY')
-if not groq_api_key:
-    raise ValueError("API key not set in environment variables")
+#groq_api_key = os.getenv('GROQ_API_KEY')
+##    raise ValueError("API key not set in environment variables")
 
 client = Groq(api_key=groq_api_key)
 
