@@ -39,4 +39,22 @@ This project is a dedicated Conversational AI system built for REVA University t
 
 ---
 
-## Project Structure
+=---
+
+## Installation and Setup
+### Prerequisites
+- Python 3.8+
+- Node.js
+- Browser for frontend testing
+
+### Steps
+1. Clone this repository:
+   ```bash
+   git clone https://github.com/Darshn-26/Conversational_AI
+
+
+# **Darshan PR**
+* BTech, Computer Science Engineering
+* REVA University
+* Email: darshanpr26@gmail.com
+
