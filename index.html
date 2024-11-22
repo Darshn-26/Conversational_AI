@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Voice Conversation</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #080707;
+            color: white;
+            font-family: Arial, sans-serif;
+            flex-direction: column;
+        }
+        .mic-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        .mic-icon {
+            font-size: 4rem;
+            color: white;
+            margin-bottom: 10px;
+            transition: color 0.3s;
+        }
+        .listening .mic-icon {
+            color: #a5f8a8;
+        }
+        .waveform {
+            display: flex;
+            gap: 4px;
+            justify-content: center;
+            align-items: center;
+            height: 80px;
+            margin-top: 10px;
+            display: none;
+        }
+        .bar {
+            width: 9px;
+            height: 50px;
+            background: linear-gradient(180deg, rgb(18, 0, 88), rgb(58, 1, 128), rgb(177, 2, 231),rgb(186, 2, 100),red);
+            animation: bounce 0.6s infinite ease-in-out;
+            border-radius: 3px;
+        }
+        .bar:nth-child(1) { animation-delay: 0s; }
+        .bar:nth-child(2) { animation-delay: 0.1s; }
+        .bar:nth-child(3) { animation-delay: 0.2s; }
+        .bar:nth-child(4) { animation-delay: 0.3s; }
+        .bar:nth-child(5) { animation-delay: 0.4s; }
+        .bar:nth-child(6) { animation-delay: 0.5s; }
+        .bar:nth-child(7) { animation-delay: 0.6s; }
+        .bar:nth-child(8) { animation-delay: 0.7s; }
+        .bar:nth-child(9) { animation-delay: 0.8s; }
+        .bar:nth-child(10) { animation-delay: 0.9s; }
+        .bar:nth-child(11) { animation-delay: 1s; }
+        .bar:nth-child(12) { animation-delay: 1.1s; }
+        .bar:nth-child(13) { animation-delay: 1.2s; }
+        .bar:nth-child(14) { animation-delay: 1.3s; }
+        .bar:nth-child(15) { animation-delay: 1.4s; }
+        .bar:nth-child(16) { animation-delay: 1.5s; }
+        .bar:nth-child(17) { animation-delay: 1.6s; }
+        .bar:nth-child(18) { animation-delay: 1.7s; }
+        .bar:nth-child(19) { animation-delay: 1.8s; }
+        .bar:nth-child(20) { animation-delay: 1.9s; }
+        @keyframes bounce {
+            0%, 100% { transform: scaleY(0.3); }
+            50% { transform: scaleY(1.2); }
+        }
+
+        .chat-box {
+            width: 100%;
+            max-width: 1100px;
+            padding: 10px;
+            background: #030303;
+            border-radius: 15px;
+            text-align: center;
+            font-size: 1.2em;
+            overflow-y: auto;
+            max-height: 150px;
+            position: fixed;
+            bottom: 60px;
+        }
+        .highlight {
+            color: rgb(254, 164, 39);
+        }
+        .restart-button {
+            position: fixed;
+            bottom: 20px;
+            font-size: 1em;
+            margin-top: 4px;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 5px;
+            background-color: #3a3a3a;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .restart-button:hover {
+            background-color: #049898;
+        }
+    </style>
+</head>
+<body>
+
+<div class="mic-container">
+    <div class="mic-icon">🎙️</div>
+    <div class="waveform">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+    </div>
+</div>
+
+<div class="chat-box" id="chat-box">Say "Hello" to start...</div>
+<button class="restart-button" onclick="restartConversation()">Restart</button>
+
+<script>
+    const micContainer = document.querySelector('.mic-container');
+    const micIcon = document.querySelector('.mic-icon');
+    const waveform = document.querySelector('.waveform');
+    const chatBox = document.getElementById('chat-box');
+    let isListening = false;
+    let isAIResponding = false;
+    let userName = "";
+
+    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    recognition.lang = 'en-US';
+    recognition.interimResults = true;
+    recognition.continuous = true;
+
+    const synth = window.speechSynthesis;
+
+    function startListening() {
+        if (!isListening) {
+            recognition.start();
+        }
+    }
+
+    recognition.onstart = () => {
+        isListening = true;
+        micContainer.classList.add('listening');
+        waveform.style.display = 'flex';
+        chatBox.innerText = "Listening...";
+    };
+
+    recognition.onresult = async (event) => {
+        const interimTranscript = Array.from(event.results)
+            .map(result => result[0].transcript)
+            .join('');
+
+        chatBox.innerText = `You said: "${interimTranscript}"`;
+
+        if (event.results[0].isFinal) {
+            const userMessage = interimTranscript;
+            chatBox.innerText = `You said: "${userMessage}"`;
+
+            recognition.stop();
+            isListening = false;
+            isAIResponding = true;
+            if (userMessage.toLowerCase() === 'hello') {
+                userName = prompt("What's your name?");
+                chatBox.innerText = `Hello, ${userName}! How can I assist you?`;
+            } else {
+                fetchAndRespond(userMessage);
+            }
+        }
+    };
+
+    recognition.onend = () => {
+        isListening = false;
+        micContainer.classList.remove('listening');
+        waveform.style.display = 'none';
+
+        if (!isAIResponding) {
+            startListening();
+        }
+    };
+
+    recognition.onerror = (event) => {
+        console.error("Speech recognition error detected: " + event.error);
+        if (event.error === 'no-speech' || event.error === 'network') {
+            startListening();
+        }
+    };
+
+    async function fetchAndRespond(message) {
+        chatBox.innerText = "Processing...";
+        try {
+            const response = await fetch('/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message })
+            });
+            
+            if (!response.ok) {
+                throw new Error(`Server error: ${response.status}`);
+            }
+
+            const result = await response.json();
+            if (result.message) {
+                displayAndSpeakResponse(result.message);
+            } else {
+                chatBox.innerText = "Error: No response from AI.";
+                isAIResponding = false;
+                startListening();
+            }
+        } catch (error) {
+            console.error("Fetch error:", error);
+            chatBox.innerText = "Error: Unable to communicate with AI.";
+            isAIResponding = false;
+            startListening();
+        }
+    }
+
+    function displayAndSpeakResponse(text) {
+        const words = text.split(" ");
+        chatBox.innerHTML = words.map(word => `<span>${word}</span>`).join(" ");
+        
+        const spans = chatBox.querySelectorAll("span");
+        let wordIndex = 0;
+        
+        if (synth.speaking) {
+            synth.cancel();
+        }
+
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.onstart = () => {
+            isAIResponding = true;
+            waveform.style.display = 'flex';
+        };
+
+        utterance.onboundary = (event) => {
+            if (event.name === 'word') {
+                spans.forEach(span => span.classList.remove('highlight'));
+                if (wordIndex < spans.length) {
+                    spans[wordIndex].classList.add('highlight');
+                    wordIndex++;
+                }
+            }
+        };
+
+        utterance.onend = () => {
+            isAIResponding = false;
+            waveform.style.display = 'none';
+            spans.forEach(span => span.classList.remove('highlight'));
+            startListening();
+        };
+
+        utterance.onerror = (event) => {
+            console.error("Speech synthesis error:", event.error);
+            isAIResponding = false;
+            startListening();
+        };
+
+        synth.speak(utterance);
+    }
+
+    function restartConversation() {
+        if (synth.speaking) synth.cancel();
+        recognition.stop();
+        chatBox.innerText = "Conversation restarted. Say 'Hello' to start...";
+        userName = "";
+        isListening = false;
+        isAIResponding = false;
+        startListening();
+    }
+
+    startListening();
+</script>
+
+</body>
+</html>
