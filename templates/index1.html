@@ -11,10 +11,38 @@
             align-items: center;
             height: 100vh;
             margin: 0;
-            background-color: #080707;
             color: white;
             font-family: Arial, sans-serif;
             flex-direction: column;
+            background-image: url("/assets/bg.png");
+
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            background-attachment: fixed;
+            scroll-behavior: smooth;
+            animation: background-breath 10s infinite alternate ease-in-out;
+        }
+        @keyframes background-breath {
+            0% {
+                background-size: 100%;
+            }
+            100% {
+                background-size: 105%;
+            }
+        }
+        .logo {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            z-index: 5;
+        }
+        .logo img {
+            height: 100px;
+            width: 200px;
+            object-fit: contain; /* This ensures the image maintains its aspect ratio */
         }
         .mic-container {
             display: flex;
@@ -108,6 +136,9 @@
     </style>
 </head>
 <body>
+    <div class="logo">
+        <img src="/assets/logo.png" alt="logo">
+    </div>
 
 <div class="mic-container">
     <div class="mic-icon">🎙️</div>

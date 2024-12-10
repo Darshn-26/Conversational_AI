@@ -4,15 +4,15 @@ from flask import Flask, request, jsonify, render_template
 from groq import Groq  # Assuming the `groq` package is installed and available
  # Assuming you have a way to store/get the API key
 
-app = Flask(__name__)
+app = Flask(__name__,static_folder='assets',template_folder='templates')
 
 # Initialize Groq client with API key
 
-app = Flask(__name__)
+app = Flask(__name__,static_folder='assets',template_folder='templates')
 
 load_dotenv()
 
-app = Flask(__name__)
+app = Flask(__name__,static_folder='assets',template_folder='templates')
 
 # Fetch API key from environment variable
 groq_api_key = os.getenv('GROQ_API_KEY')
