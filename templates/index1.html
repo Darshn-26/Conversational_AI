@@ -36,7 +36,7 @@
         .logo {
             position: fixed;
             top: 10px;
-            left: 10px;
+            left: 20px;
             z-index: 5;
         }
         .logo img {
@@ -105,7 +105,8 @@
             width: 100%;
             max-width: 1100px;
             padding: 10px;
-            background: #030303;
+            background: rgba(245, 242, 242, 0.129);
+            backdrop-filter: blur(10px);
             border-radius: 15px;
             text-align: center;
             font-size: 1.2em;
@@ -113,22 +114,28 @@
             max-height: 150px;
             position: fixed;
             bottom: 60px;
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 15px;
+            
+            box-shadow: 0 6px 8px rgba(144, 240, 251, 0.055);
         }
         .highlight {
             color: rgb(254, 164, 39);
         }
         .restart-button {
             position: fixed;
-            bottom: 20px;
+            bottom: 15px;
             font-size: 1em;
-            margin-top: 4px;
-            padding: 8px 12px;
+            margin-top: 15px;
+            padding: 5px 10px;
             border: none;
-            border-radius: 5px;
-            background-color: #3a3a3a;
+            border-radius: 15px;
+            background: rgba(25, 202, 226, 0.282);
+            backdrop-filter: blur(10px);
             color: white;
             cursor: pointer;
             transition: background-color 0.3s;
+            
         }
         .restart-button:hover {
             background-color: #049898;

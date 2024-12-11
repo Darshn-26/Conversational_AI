@@ -35,7 +35,7 @@
         .logo {
             position: fixed;
             top: 10px;
-            left: 10px;
+            left: 20px;
             z-index: 5;
         }
         .logo img {
@@ -67,6 +67,29 @@
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
+        }
+                .text:hover p, .meet:hover p, .ai:hover p {
+            background: linear-gradient(25deg, #01aec2, #e6e4e4, yellow);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: hoverBreathScale 3s ease-in-out infinite;
+            -webkit-background-clip: text;
+            background-clip: text;
+        }
+        @keyframes hoverBreathScale {
+            0% {
+                background-image: linear-gradient(25deg, #01aec2, #e6e4e4, yellow);
+                transform: scale(1);
+            }
+            50% {
+                background-image: linear-gradient(25deg, yellow, #01aec2, #e6e4e4, );
+                transform: scale(1.05);
+            }
+            100% {
+                background-image: linear-gradient(25deg, yellow,  #e6e4e4,#01aec2);
+                transform: scale(1);
+            }
         }
 
         .overview {
@@ -134,7 +157,7 @@
         }
 
         .breath-animation {
-            animation: breath 2s infinite;
+            animation: breath 1.5s infinite;
         }
 
         @keyframes breath {
@@ -187,11 +210,11 @@
     </div>
 
     <div class="meet" id="meet">
-        <p>&nbsp;Meet !&nbsp;</p>
+        <p class="breath-animation">&nbsp;Meet !&nbsp;</p>
     </div>
 
     <div class="ai" id="ai">
-        <p>&nbsp;"Conversational&nbsp;AI"&nbsp;</p>
+        <p class="breath-animation">&nbsp;"Conversational&nbsp;AI"&nbsp;</p>
     </div>
 
     <div class="overview" id="overview">
@@ -223,7 +246,7 @@
         const autoScroll = () => {
             showSection(autoScrollIndex);
             autoScrollIndex = (autoScrollIndex + 1) % sections.length;
-            autoScrollTimeout = setTimeout(autoScroll, 1500);
+            autoScrollTimeout = setTimeout(autoScroll, 2000);
         };
 
         const stopAutoScroll = () => {
